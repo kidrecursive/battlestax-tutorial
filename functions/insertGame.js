@@ -1,4 +1,4 @@
-const astra = require("astra-js");
+const { createClient } = require("@astrajs/collections");
 
 exports.handler = async (event, context) => {
   let gameId;
@@ -13,22 +13,22 @@ exports.handler = async (event, context) => {
     };
   }
 
-  const astraClient = await astra.createClient({
-    baseUrl: `https://${process.env.ASTRA_DB_ID}-${process.env.ASTRA_DB_REGION}.apps.astra.datastax.com`,
+  const astraClient = await createClient({
+    astraDatabaseId: process.env.ASTRA_DB_ID,
+    astraDatabaseRegion: process.env.ASTRA_DB_REGION,
     username: process.env.ASTRA_DB_USERNAME,
     password: process.env.ASTRA_DB_PASSWORD,
   });
-  const namespace = process.env.ASTRA_DB_KEYSPACE;
-  const collection = process.env.GAMES_COLLECTION;
+
+  const gamesCollection = astraClient
+    .namespace(process.env.ASTRA_DB_KEYSPACE)
+    .collection(process.env.GAMES_COLLECTION);
 
   try {
-    const res = await astraClient.put(
-      `/namespaces/${namespace}/collections/${collection}/${gameId}`,
-      gamePayload
-    );
+    const res = await gamesCollection.create(gameId, gamePayload);
     return {
       statusCode: 200,
-      body: JSON.stringify(res.jsonResponse),
+      body: JSON.stringify(res),
     };
   } catch (e) {
     console.error(e);
