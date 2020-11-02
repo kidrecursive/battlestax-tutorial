@@ -2,22 +2,22 @@
   "name": "battlestax-tutorial",
   "version": "0.0.1",
   "dependencies": {
+    "@astrajs/collections": "0.0.5",
     "@reduxjs/toolkit": "^1.4.0",
-    "@testing-library/jest-dom": "^5.11.4",
-    "@testing-library/react": "^11.0.4",
-    "@testing-library/user-event": "^12.1.7",
+    "@testing-library/jest-dom": "^4.2.4",
+    "@testing-library/react": "^9.5.0",
+    "@testing-library/user-event": "^7.2.1",
     "react": "^16.13.1",
     "react-dom": "^16.13.1",
     "react-scripts": "3.4.3",
-    "astra-js": "kidrecursive/astra-js#master",
     "lodash": "^4.17.20"
   },
   "scripts": {
     "dev": "netlify dev",
     "start": "react-scripts start",
     "build": "react-scripts build",
-    "test": "react-scripts test",
-    "test:functions": "jest functions/* --coverage --setupFiles dotenv/config",
+    "test": "CI=true react-scripts test",
+    "test:functions": "jest functions/* --coverage --setupFiles dotenv/config --testEnvironment node",
     "eject": "react-scripts eject",
     "storybook": "start-storybook -p 6006 -s public",
     "build-storybook": "build-storybook -s public"
